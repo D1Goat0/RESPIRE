@@ -10,7 +10,7 @@ Built by [L*UKE (D1Goat0)](https://github.com/D1Goat0) and
 [D3CRYPT (D3CRYPT-1)](https://github.com/D3CRYPT-1) because we got tired of
 `ssh pi@192.168.1.whatever` fifteen times a day and wanted our home lab to
 look a little less like a pile of SD cards and a little more like something
-out of a server room. Mostly a hobby project, scratch-your-own-itch energy.
+out of a server room. Mostly a hobby project.
 
 ```
 ------------------------------------------------
@@ -39,7 +39,7 @@ It's not trying to be Kubernetes or anything fancy — just a lightweight
 layer on top of plain Linux that makes managing a handful of boxes less
 annoying.
 
-## Project layout
+## Project layout and Directories
 
 ```
 respire-homelab/
@@ -65,11 +65,11 @@ respire-homelab/
 └── install.sh
 ```
 
-## What you'll need
+## Stuff you need
 
-- Raspberry Pi OS Lite (Bookworm or newer) or basically any Debian-based box
+- Raspberry Pi OS Lite (Bookworm or newer) or basically any Debian based box Should Work Allthough I havent Tested Yet.
 - Python 3.9+
-- Your devices reachable on the same network
+- Your devices reachable on the same network Unless you want to make it reachable using Netbird or something like that.
 
 Dependencies (installed for you by `install.sh`):
 `rich`, `prompt_toolkit`, `psutil`, `paramiko`, `PyYAML`
