@@ -1,0 +1,5 @@
+rich>=13.7.0
+prompt_toolkit>=3.0.43
+psutil>=5.9.8
+paramiko>=3.4.0
+PyYAML>=6.0.1

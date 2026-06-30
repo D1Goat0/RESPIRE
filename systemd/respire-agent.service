@@ -1,0 +1,14 @@
+[Unit]
+Description=RESPIRE Node Agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+ExecStart=/usr/bin/python3 /opt/respire/agent/respire_agent.py --port 8732 --token-file /etc/respire/agent_token
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

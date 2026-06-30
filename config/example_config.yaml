@@ -1,0 +1,22 @@
+# RESPIRE - example configuration
+# Copy to ~/.respire/config.yaml (this happens automatically on first run)
+
+node_name: raspberrypi-01
+cluster_name: Main Lab
+role: controller          # controller | worker | storage
+
+discovery:
+  enabled: true
+  subnet: auto             # "auto" detects your /24, or set e.g. 192.168.1.0/24
+  interval_seconds: 60
+
+agent:
+  port: 8732
+  require_token: true
+
+monitor:
+  refresh_seconds: 2
+
+ui:
+  theme: cyan
+  show_banner: true
