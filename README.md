@@ -10,7 +10,7 @@ Built by [L*UKE (D1Goat0)](https://github.com/D1Goat0) and
 [D3CRYPT (D3CRYPT-1)](https://github.com/D3CRYPT-1) because we got tired of
 `ssh pi@192.168.1.whatever` fifteen times a day and wanted our home lab to
 look a little less like a pile of SD cards and a little more like something
-out of a server room. Mostly a hobby project.
+out of a server room. Mostly a hobby project. (And For A Reason To Use Claude)
 
 ```
 ------------------------------------------------
