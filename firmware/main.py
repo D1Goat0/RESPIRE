@@ -9,20 +9,24 @@ Or, after installation:
     respire
 """
 
+import os
 import sys
 import time
 
+# Make sure the parent directory (the one containing the `firmware/` package)
+# is on sys.path. This is required because running `python3 main.py`
+# directly only adds this file's own directory (firmware/) to sys.path,
+# not its parent — so `import firmware` would otherwise fail no matter
+# where main.py is installed.
+_PARENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _PARENT_DIR not in sys.path:
+    sys.path.insert(0, _PARENT_DIR)
+
 from rich.console import Console
 
-try:
-    from firmware import config as config_mod
-    from firmware import db
-    from firmware import cli
-except ImportError:
-    # Allow running directly from inside the firmware/ directory too.
-    import config as config_mod
-    import db
-    import cli
+from firmware import config as config_mod
+from firmware import db
+from firmware import cli
 
 console = Console()
 
