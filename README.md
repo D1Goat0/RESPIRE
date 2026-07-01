@@ -77,8 +77,9 @@ Dependencies (installed for you by `install.sh`):
 ## Quick start
 
 ```bash
-git clone <this-repo> respire-homelab
-cd respire-homelab
+sudo apt install git
+git clone https://github.com/D1Goat0/RESPIRE.git
+cd RESPIRE
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
