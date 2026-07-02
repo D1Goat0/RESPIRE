@@ -16,16 +16,12 @@ import secrets
 import time
 import os
 import stat
-
 from rich.console import Console
 from rich.table import Table
-
 from . import db
 
 console = Console()
-
 SSH_KEY_PATH = os.path.expanduser("~/.ssh/respire_id_ed25519")
-
 
 def generate_token(device_name: str) -> str:
     token = secrets.token_hex(32)
@@ -35,7 +31,6 @@ def generate_token(device_name: str) -> str:
             (device_name, token, time.time()),
         )
     return token
-
 
 def get_token(device_name: str):
     with db.get_conn() as conn:

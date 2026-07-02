@@ -11,17 +11,14 @@ import socket
 import subprocess
 import sys
 import time
-
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
-
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.styles import Style
-
 from . import config as config_mod
 from . import device_manager
 from . import cluster
@@ -81,7 +78,6 @@ def banner(cfg):
     lines.append(f"{cfg['role']}\n")
     lines.append(f"Devices online: ", style="bold")
     lines.append(f"{online} / {len(devices)}")
-
     console.print(Panel(lines, title=title, border_style="cyan", expand=False))
 
     if devices:
@@ -104,7 +100,6 @@ def banner(cfg):
             )
         console.print(table)
 
-
 def show_help():
     table = Table(title="Available Commands", show_lines=False)
     table.add_column("Command", style="bold cyan")
@@ -112,7 +107,6 @@ def show_help():
     for cmd, desc in COMMAND_HELP:
         table.add_row(cmd, desc)
     console.print(table)
-
 
 def show_services():
     table = Table(title="Running Services")
@@ -137,7 +131,6 @@ def show_services():
     except Exception as e:
         console.print(f"[red]Could not list services: {e}[/red]")
 
-
 def show_logs():
     rows = db.get_logs(50)
     table = Table(title="System Logs (most recent first)")
@@ -154,7 +147,6 @@ def show_logs():
         table.add_row(ts, f"[{level_color}]{r['level']}[/{level_color}]", r["source"], r["message"])
     console.print(table)
 
-
 def do_update():
     console.print("[cyan]Checking for firmware updates...[/cyan]")
     repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -167,7 +159,6 @@ def do_update():
             console.print(f"[red]Update failed: {e}[/red]")
     else:
         console.print("[yellow]Not a git checkout — skipping source update.[/yellow]")
-
     try:
         subprocess.run(
             [sys.executable, "-m", "pip", "install", "-q", "--upgrade", "-r",
@@ -178,7 +169,6 @@ def do_update():
     except Exception as e:
         console.print(f"[yellow]Could not update dependencies automatically: {e}[/yellow]")
 
-
 def do_reboot(target=None):
     if target is None or target in ("local", "self", socket.gethostname()):
         console.print("[bold red]Rebooting local node in 3 seconds... (Ctrl+C to cancel)[/bold red]")
@@ -188,7 +178,6 @@ def do_reboot(target=None):
         except KeyboardInterrupt:
             console.print("[yellow]Reboot cancelled.[/yellow]")
         return
-
     device = device_manager.get_device(target)
     if not device or not device["approved"]:
         console.print(f"[red]'{target}' is not a known, approved device.[/red]")
@@ -199,7 +188,6 @@ def do_reboot(target=None):
         "[yellow]Note: this requires the respire-agent service running and approved on the target node.[/yellow]"
     )
 
-
 def do_shutdown(target=None):
     if target is None or target in ("local", "self", socket.gethostname()):
         console.print("[bold red]Shutting down local node in 3 seconds... (Ctrl+C to cancel)[/bold red]")
@@ -209,7 +197,6 @@ def do_shutdown(target=None):
         except KeyboardInterrupt:
             console.print("[yellow]Shutdown cancelled.[/yellow]")
         return
-
     device = device_manager.get_device(target)
     if not device or not device["approved"]:
         console.print(f"[red]'{target}' is not a known, approved device.[/red]")
@@ -219,7 +206,6 @@ def do_shutdown(target=None):
     console.print(
         "[yellow]Note: this requires the respire-agent service running and approved on the target node.[/yellow]"
     )
-
 
 def do_connect(name):
     if not name:
@@ -244,12 +230,10 @@ def do_connect(name):
     except FileNotFoundError:
         console.print("[red]ssh client not found on this system.[/red]")
 
-
 def do_docker(args):
     if not subprocess_exists("docker"):
         console.print("[yellow]Docker is not installed on this node.[/yellow]")
         return
-
     sub = args[0] if args else "ps"
     if sub == "ps":
         out = subprocess.run(
@@ -275,11 +259,9 @@ def do_docker(args):
     else:
         console.print("[yellow]Usage: docker [ps|start <name>|stop <name>|restart <name>][/yellow]")
 
-
 def subprocess_exists(binary):
     import shutil
     return shutil.which(binary) is not None
-
 
 def dispatch(line: str, cfg: dict):
     if not line.strip():
@@ -289,16 +271,12 @@ def dispatch(line: str, cfg: dict):
     except ValueError as e:
         console.print(f"[red]Parse error: {e}[/red]")
         return True
-
     cmd, args = parts[0].lower(), parts[1:]
-
     if cmd in ("exit", "quit"):
         console.print("[cyan]Dropping to normal shell. Type 'respire' to return.[/cyan]")
         return False
-
     elif cmd == "help":
         show_help()
-
     elif cmd == "devices":
         if args and args[0] == "scan":
             hosts = network.run_discovery()
@@ -308,16 +286,13 @@ def dispatch(line: str, cfg: dict):
                 )
         else:
             device_manager.show_devices_table()
-
     elif cmd == "device":
         if len(args) >= 2 and args[0] == "info":
             device_manager.show_device_info(args[1])
         else:
             console.print("[yellow]Usage: device info <name>[/yellow]")
-
     elif cmd == "connect":
         do_connect(args[0] if args else None)
-
     elif cmd == "cluster":
         if not args:
             cluster.cluster_status(cfg["cluster_name"])
@@ -331,22 +306,17 @@ def dispatch(line: str, cfg: dict):
             cluster.set_role(args[1], args[2])
         else:
             console.print("[yellow]Usage: cluster [status|add <ip>|remove <name>|role <name> <role>][/yellow]")
-
     elif cmd == "storage":
         storage.show_storage()
-
     elif cmd == "mount":
         if len(args) >= 2:
             storage.mount_network_share(args[0], args[1])
         else:
             console.print("[yellow]Usage: mount <share_path> <mountpoint>[/yellow]")
-
     elif cmd == "network":
         network.show_network_info()
-
     elif cmd == "services":
         show_services()
-
     elif cmd == "logs":
         show_logs()
 
